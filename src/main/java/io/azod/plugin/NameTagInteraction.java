@@ -49,7 +49,7 @@ public class NameTagInteraction extends SimpleBlockInteraction {
                 byte activeHotbarSlot = playerInventory.getActiveHotbarSlot();
                 ItemStack inHandItemStack = playerInventory.getActiveHotbarItem();
                 NameTagMetadata existingMeta = item.getFromMetadataOrNull(NameTagMetadata.KEYED_CODEC.getKey(), NameTagMetadata.CODEC);
-                if (existingMeta != null) {
+                if (existingMeta == null) {
                     NameTagMetadata defaultMeta = item.getFromMetadataOrDefault(NameTagMetadata.KEYED_CODEC.getKey(), NameTagMetadata.CODEC);
                     defaultMeta.setNameplateValue("DEFAULT_VALUE");
                     assert inHandItemStack != null;
@@ -66,33 +66,22 @@ public class NameTagInteraction extends SimpleBlockInteraction {
                     if (npc == null) {
                         context.getState().state = InteractionState.Failed;
                     } else {
-                        boolean tagFound = false;
 
-                        for(String group : this.acceptedNpcGroup) {
-                            if (npc.getRoleName().contains(group)) {
-                                tagFound = true;
-                                break;
-                            }
-                        }
-
-                        if (!tagFound) {
-                            context.getState().state = InteractionState.Failed;
+                        Nameplate nameplateComponent = commandBuffer.getComponent(targetEntity, Nameplate.getComponentType());
+                        if (nameplateComponent == null) {
+                            commandBuffer.addComponent(targetEntity, Nameplate.getComponentType(), new Nameplate(existingMeta.getNameplateValue()));
                         } else {
-                            Nameplate nameplateComponent = commandBuffer.getComponent(targetEntity, Nameplate.getComponentType());
-                            assert existingMeta != null;
-                            if (nameplateComponent == null) {
-                                commandBuffer.addComponent(targetEntity, Nameplate.getComponentType(), new Nameplate(existingMeta.getNameplateValue()));
-                            } else {
-                                nameplateComponent.setText(existingMeta.getNameplateValue());
-                            }
-                                playerInventory.getHotbar().removeItemStackFromSlot(activeHotbarSlot);
-                            }
+                            nameplateComponent.setText(existingMeta.getNameplateValue());
                         }
+                        playerInventory.getHotbar().removeItemStackFromSlot(activeHotbarSlot);
+                        context.getState().state = InteractionState.Finished;
+
                     }
                 }
-
             }
+
         }
+    }
 
     @Override
     protected void interactWithBlock(@NonNullDecl World world, @NonNullDecl CommandBuffer<EntityStore> commandBuffer, @NonNullDecl InteractionType interactionType, @NonNullDecl InteractionContext interactionContext, @NullableDecl ItemStack itemStack, @NonNullDecl Vector3i vector3i, @NonNullDecl CooldownHandler cooldownHandler) {
