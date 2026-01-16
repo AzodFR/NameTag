@@ -3,22 +3,22 @@
     "Name": "server.items.Name_Tag.name",
     "Description": "server.items.Name_Tag.description"
   },
-  "Model": "Items/CaptureCrate/Capture_Crate.blockymodel",
-  "Texture": "Items/CaptureCrate/Capture_Crate_Texture.png",
-  "Icon": "Icons/ItemsGenerated/Tool_Capture_Crate.png",
-  "PlayerAnimationsId": "Block",
+  "Model": "Items/Azod/Name_Tag.blockymodel",
+  "Texture": "Items/Azod/Name_Tag.png",
+  "Icon": "Icons/ItemsGenerated/Azod/Name_Tag.png",
+  "PlayerAnimationsId": "Pickaxe",
   "MaxStack": 1,
   "ItemLevel": 9,
   "Recipe": {
     "TimeSeconds": 2,
     "Input": [
       {
-        "Quantity": 4,
-        "ResourceTypeId": "Wood_All"
+        "Quantity": 1,
+        "ItemId": "Ingredient_Leather_Light"
       },
       {
         "ItemId": "Ingredient_Life_Essence",
-        "Quantity": 50
+        "Quantity": 10
       }
     ],
     "BenchRequirement": [
@@ -33,11 +33,30 @@
   },
   "Interactions": {
     "Use": {
-      "Type": "UseNameTag",
-      "AcceptedNpcGroups": [
-        "Aggressive",
-        "Neutral",
-        "Passive"
+      "Interactions": [
+        {
+          "Type": "Simple",
+          "Effects": {
+            "ItemAnimationId": "Interact"
+          },
+          "RunTime": 0.05,
+          "Next": {
+            "Type": "UseNameTag",
+            "Failed": {
+              "Type": "Simple",
+              "Effects": {
+                "LocalSoundEventId": "SFX_Capture_Crate_Capture_Fail_Local"
+              }
+            },
+            "Next": {
+              "Type": "Simple",
+              "Effects": {
+                "LocalSoundEventId": "SFX_Capture_Crate_Capture_Succeed_Local",
+                "WorldSoundEventId": "SFX_Capture_Crate_Capture_Succeed"
+              }
+            }
+          }
+        }
       ]
     },
     "Primary": {
@@ -50,12 +69,6 @@
           "RunTime": 0.05,
           "Next": {
             "Type": "UseNameTag",
-            "AcceptedNpcGroups": [
-              "Aggressive",
-              "Neutral",
-              "Passive"
-            ],
-            "FullIcon": "Icons/ItemsGenerated/Tool_Capture_Crate_Full.png",
             "Failed": {
               "Type": "Simple",
               "Effects": {
@@ -75,15 +88,15 @@
     }
   },
   "IconProperties": {
-    "Scale": 0.58823,
+    "Scale": 1.4,
     "Rotation": [
-      22.5,
-      45.0,
-      22.5
+      16,
+      32,
+      29
     ],
     "Translation": [
-      0.0,
-      -13.5
+      -4,
+      -11
     ]
   }
 }

@@ -1,0 +1,30 @@
+$Common = "Common.ui";
+
+Group {
+    LayoutMode: Center;
+
+    Group #InputPanel {
+        Background: (TexturePath: "Common/ContainerFullPatch.png", Border: 20);
+        Anchor: (Width: 800, Height: 225);
+        LayoutMode: Top;
+
+        Label #TitleLabel {
+             Style: (FontSize: 36, Alignment: Center);
+             Anchor: (Top: 10);
+             Text: "Choose a name";
+             Padding: (Full: 2);
+        }
+         $Common.@TextField #InputField {
+             Style: $Common.@DefaultInputFieldStyle;
+             Background: $Common.@InputBoxBackground;
+             Anchor: (Top: 25, Width: 200, Height: 50);
+             Padding: (Full: 2);
+        }
+        $Common.@TextButton #ValidInput {
+            Anchor: (Top: 25, Width: 200, Height: 50);
+            Padding: (Full: 2);
+            Text: "Confirm";
+        }
+
+    }
+}
