@@ -1,0 +1,22 @@
+{
+    "Group": "Azod",
+    "Name": "NameTag",
+    "Version": "0.0.1",
+    "Description": "Want to use name tags ?",
+    "Authors": [
+        {
+            "Name": "azod"
+        }
+    ],
+    "Website": "example.org",
+    "ServerVersion": "*",
+    "Dependencies": {
+        
+    },
+    "OptionalDependencies": {
+        
+    },
+    "DisabledByDefault": false,
+    "Main": "io.azod.plugin.NameTag",
+    "IncludesAssetPack": true
+}
