@@ -1,14 +1,14 @@
 {
     "Group": "Azod",
-    "Name": "NameTag",
-    "Version": "0.0.1",
+    "Name": "Name Tag",
+    "Version": "1.0.0",
     "Description": "Want to use name tags ?",
     "Authors": [
         {
             "Name": "azod"
         }
     ],
-    "Website": "example.org",
+    "Website": "https://legacy.curseforge.com/hytale/mods/name-tag",
     "ServerVersion": "*",
     "Dependencies": {
         
