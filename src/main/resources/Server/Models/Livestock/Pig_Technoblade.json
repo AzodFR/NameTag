@@ -1,0 +1,13 @@
+{
+  "Parent": "Pig",
+  "Model": "NPC/Livestock/Pig/Models/Model.blockymodel",
+  "Texture": "NPC/Livestock/Pig/Models/Texture_Pink.png",
+  "RandomAttachmentSets": {
+    "Fur": {
+      "Fur": {
+        "Model": "NPC/Livestock/Pig/Models/Attachments/Crown.blockymodel",
+        "Texture": "NPC/Livestock/Pig/Models/Attachments/Crown_Texture.png"
+      }
+    }
+  }
+}

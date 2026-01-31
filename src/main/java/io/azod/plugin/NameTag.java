@@ -5,6 +5,7 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Int
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import io.azod.plugin.interaction.NameTagInteraction;
+import io.azod.plugin.system.NameplatedEntitySystem;
 
 import javax.annotation.Nonnull;
 
@@ -20,7 +21,15 @@ public class NameTag extends JavaPlugin {
 
     @Override
     protected void setup() {
+        super.setup();
         LOGGER.atInfo().log("Setting up plugin " + this.getName());
         this.getCodecRegistry(Interaction.CODEC).register("UseNameTag", NameTagInteraction.class, NameTagInteraction.CODEC);
+    }
+
+    @Override
+    protected void start() {
+        super.start();
+        LOGGER.atInfo().log("Starting plugin " + this.getName());
+        this.getEntityStoreRegistry().registerSystem(new NameplatedEntitySystem());
     }
 }
