@@ -5,7 +5,7 @@
   },
   "Model": "Items/Azod/Name_Tag.blockymodel",
   "Texture": "Items/Azod/Name_Tag.png",
-  "Icon": "Icons/ItemsGenerated/Azod/Name_Tag.png",
+  "Icon": "Icons/ItemsGenerated/Name_Tag.png",
   "PlayerAnimationsId": "Pickaxe",
   "MaxStack": 1,
   "ItemLevel": 9,
@@ -88,15 +88,15 @@
     }
   },
   "IconProperties": {
-    "Scale": 1.4,
+    "Scale": 0.8,
     "Rotation": [
-      16,
-      32,
-      29
+      49,
+      57,
+      30
     ],
     "Translation": [
-      -4,
-      -11
+      1,
+      -6
     ]
   }
 }
