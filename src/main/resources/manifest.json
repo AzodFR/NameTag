@@ -1,7 +1,7 @@
 {
     "Group": "Azod",
     "Name": "Name Tag",
-    "Version": "1.1.0",
+    "Version": "1.1.2",
     "Description": "Want to use name tags ?",
     "Authors": [
         {
@@ -11,7 +11,7 @@
     "Website": "https://legacy.curseforge.com/hytale/mods/name-tag",
     "ServerVersion": "*",
     "Dependencies": {
-        
+        "Hytale:NPCReputation": "*"
     },
     "OptionalDependencies": {
         
