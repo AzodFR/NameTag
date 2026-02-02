@@ -1,7 +1,8 @@
 {
   "TagName": "Dinnerbone",
   "AllowedNPCRoles": [
-    "Pig"
+    "Pig",
+    "Chicken_Chick"
   ],
   "PlayAnimation": {
     "AnimationName": "Dinnerbone",
