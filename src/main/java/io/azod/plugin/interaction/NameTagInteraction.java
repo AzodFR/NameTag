@@ -66,7 +66,7 @@ public class NameTagInteraction extends SimpleBlockInteraction {
         }
 
         PlayerRef playerRef = commandBuffer.getComponent(playerEntityRef, PlayerRef.getComponentType());
-        if  (playerRef == null) {
+        if (playerRef == null) {
             context.getState().state = InteractionState.Failed;
             return;
         }

@@ -1,0 +1,10 @@
+{
+  "TagName": "Technoblade",
+  "AllowedNPCRoles": [
+    "Pig"
+  ],
+  "ChangeAsset": {
+    "TargetAsset": "Pig_Technoblade",
+    "RemoveOnChange": true
+  }
+}

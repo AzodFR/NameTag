@@ -1,0 +1,10 @@
+{
+  "TagName": "Dinnerbone",
+  "AllowedNPCRoles": [
+    "Pig"
+  ],
+  "PlayAnimation": {
+    "AnimationName": "Dinnerbone",
+    "RemoveOnChange": true
+  }
+}

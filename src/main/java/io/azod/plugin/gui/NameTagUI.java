@@ -7,17 +7,15 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
-import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
-import com.hypixel.hytale.server.core.entity.nameplate.Nameplate;
 import com.hypixel.hytale.server.core.inventory.Inventory;
-import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import io.azod.plugin.component.NameTagComponent;
+import io.azod.plugin.event.ApplyTagEvent;
 
 import javax.annotation.Nonnull;
 
@@ -70,27 +68,10 @@ public class NameTagUI extends InteractiveCustomUIPage<NameTagUI.Data> {
         if (this.targetEntity == null) {
             return;
         }
-        Nameplate nameplateComponent = store.getComponent(targetEntity, Nameplate.getComponentType());
-        if (nameplateComponent == null) {
-            store.addComponent(targetEntity, Nameplate.getComponentType(), new Nameplate(this.chosenTag));
-        } else {
-            nameplateComponent.setText(this.chosenTag);
-        }
-        NPCEntity npcComponent = store.getComponent(targetEntity, NPCEntity.getComponentType());
-        if (npcComponent != null) {
-            ModelComponent modelComponent = store.getComponent(targetEntity, ModelComponent.getComponentType());
-            if (modelComponent != null) {
-                if (modelComponent.getModel().getModelAssetId().equals("Pig") && this.chosenTag.equalsIgnoreCase("technoblade")) {
-                    ModelAsset technobladePigModel = ModelAsset.getAssetMap().getAsset("Pig_Technoblade");
-                    assert technobladePigModel != null;
-                    npcComponent.setAppearance(targetEntity, technobladePigModel, store);
-                } else if (modelComponent.getModel().getModelAssetId().equals("Pig_Technoblade") && !this.chosenTag.equalsIgnoreCase("technoblade")) {
-                    ModelAsset pigModel = ModelAsset.getAssetMap().getAsset("Pig");
-                    assert pigModel != null;
-                    npcComponent.setAppearance(targetEntity, pigModel, store);
-                }
-            }
-        }
+
+        NameTagComponent tagComponent = new NameTagComponent(this.chosenTag);
+        ApplyTagEvent.dispatch(targetEntity, store, tagComponent);
+
         byte activeHotbarSlot = playerInventory.getActiveHotbarSlot();
         this.playerInventory.getHotbar().removeItemStackFromSlot(activeHotbarSlot);
     }
