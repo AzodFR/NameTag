@@ -14,20 +14,11 @@ import io.azod.plugin.asset.NameTagBehaviour;
 import io.azod.plugin.component.ChangeAssetComponent;
 import io.azod.plugin.component.NameTagComponent;
 import io.azod.plugin.component.PlayAnimationComponent;
-import io.azod.plugin.event.AppliedTagEvent;
-import io.azod.plugin.event.ApplyChangeAssetEvent;
-import io.azod.plugin.event.ApplyPlayAnimation;
 import io.azod.plugin.event.ApplyTagEvent;
-import io.azod.plugin.event.handler.OnAppliedTag;
-import io.azod.plugin.event.handler.OnApplyChangeAsset;
-import io.azod.plugin.event.handler.OnApplyPlayAnimation;
 import io.azod.plugin.event.handler.OnApplyTag;
 import io.azod.plugin.interaction.NameTagInteraction;
 import io.azod.plugin.interaction.OverriddenUseCaptureCrateInteraction;
-import io.azod.plugin.system.ChangeAssetSystem;
-import io.azod.plugin.system.NameTagSystem;
 import io.azod.plugin.system.NameTagEntityJoinSystem;
-import io.azod.plugin.system.PlayAnimationSystem;
 
 import javax.annotation.Nonnull;
 
@@ -83,15 +74,10 @@ public class NameTag extends JavaPlugin {
 
         // Register Events
         this.getEventRegistry().register(ApplyTagEvent.class, new OnApplyTag());
-        this.getEventRegistry().register(AppliedTagEvent.class, new OnAppliedTag());
-        this.getEventRegistry().register(ApplyChangeAssetEvent.class, new OnApplyChangeAsset());
-        this.getEventRegistry().register(ApplyPlayAnimation.class, new OnApplyPlayAnimation());
 
         // Register Systems
         this.getEntityStoreRegistry().registerSystem(new NameTagEntityJoinSystem());
-       // this.getEntityStoreRegistry().registerSystem(new NameTagSystem());
-        this.getEntityStoreRegistry().registerSystem(new ChangeAssetSystem());
-        this.getEntityStoreRegistry().registerSystem(new PlayAnimationSystem());
+
 
         // Register Interaction CODEC
         this.getCodecRegistry(Interaction.CODEC).register("UseNameTag", NameTagInteraction.class, NameTagInteraction.CODEC);
@@ -109,7 +95,6 @@ public class NameTag extends JavaPlugin {
     protected void start() {
         super.start();
         LOGGER.atInfo().log("Starting plugin " + this.getName());
-
 
 
     }

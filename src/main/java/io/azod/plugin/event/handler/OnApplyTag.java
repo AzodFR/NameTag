@@ -19,9 +19,6 @@ import io.azod.plugin.asset.codec.PlayAnimation;
 import io.azod.plugin.component.ChangeAssetComponent;
 import io.azod.plugin.component.NameTagComponent;
 import io.azod.plugin.component.PlayAnimationComponent;
-import io.azod.plugin.event.AppliedTagEvent;
-import io.azod.plugin.event.ApplyChangeAssetEvent;
-import io.azod.plugin.event.ApplyPlayAnimation;
 import io.azod.plugin.event.ApplyTagEvent;
 
 import java.util.function.Consumer;
@@ -66,18 +63,18 @@ private static AssetStore<String, NameTagBehaviour, DefaultAssetMap<String, Name
 
         PlayAnimationComponent playAnimationComponent = store.getComponent(entityRef, PlayAnimationComponent.getComponentType());
         if (playAnimationComponent != null) {
-            store.removeComponent(entityRef, PlayAnimationComponent.getComponentType());
             if (playAnimationComponent.getRemoveOnChange()) {
                 npcEntity.playAnimation(entityRef, AnimationSlot.Action, "Idle", store);
             }
+            store.removeComponent(entityRef, PlayAnimationComponent.getComponentType());
         }
 
         assetStore.getAssetMap().getAssetMap().forEach((fileName, asset) -> {
             if (asset.compareTagName(tag)) {
                 if (!asset.isInAllowedNPCRoles(npcEntity.getRoleName())) return;
                 if (asset.getLogMessage() != null) handleLogMessage(asset.getLogMessage());
-                if (asset.getChangeAsset() != null) handleChangeAsset(asset.getChangeAsset(), entityRef, store);
-                if (asset.getPlayAnimation() != null) handlePlayAnimation(asset.getPlayAnimation(), entityRef, store);
+                if (asset.getChangeAsset() != null) handleChangeAsset(asset.getChangeAsset(), entityRef, store, npcEntity);
+                if (asset.getPlayAnimation() != null) handlePlayAnimation(asset.getPlayAnimation(), entityRef, store, npcEntity);
             }
         });
     }
@@ -86,12 +83,14 @@ private static AssetStore<String, NameTagBehaviour, DefaultAssetMap<String, Name
         LOGGER.atInfo().log(logMessage);
     }
 
-    private void handleChangeAsset(ChangeAsset changeAsset, Ref<EntityStore> entityRef, Store<EntityStore> store) {
+    private void handleChangeAsset(ChangeAsset changeAsset, Ref<EntityStore> entityRef, Store<EntityStore> store, NPCEntity npcEntity) {
         ModelComponent modelComponent = store.getComponent(entityRef, ModelComponent.getComponentType());
         if (modelComponent == null) return;
 
         ModelAsset newModel = ModelAsset.getAssetMap().getAsset(changeAsset.getTargetAssetName());
         if (newModel == null) return;
+
+        npcEntity.setAppearance(entityRef, newModel, store);
 
         store.putComponent(entityRef, ChangeAssetComponent.getComponentType(), new ChangeAssetComponent(
                 modelComponent.getModel().getModelAssetId(),
@@ -100,7 +99,8 @@ private static AssetStore<String, NameTagBehaviour, DefaultAssetMap<String, Name
         );
     }
 
-    public void handlePlayAnimation(PlayAnimation playAnimation, Ref<EntityStore> entityRef, Store<EntityStore> store) {
+    public void handlePlayAnimation(PlayAnimation playAnimation, Ref<EntityStore> entityRef, Store<EntityStore> store, NPCEntity npcEntity) {
+        npcEntity.playAnimation(entityRef, AnimationSlot.Action, playAnimation.getAnimationName(), store);
         store.putComponent(entityRef, PlayAnimationComponent.getComponentType(), new PlayAnimationComponent(
                 playAnimation.getAnimationName(),
                 playAnimation.getRemoveOnChange()
