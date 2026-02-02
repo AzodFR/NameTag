@@ -1,5 +1,6 @@
 package io.azod.plugin.event;
 
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.event.IEvent;
@@ -12,16 +13,16 @@ import javax.annotation.Nonnull;
 
 public record AppliedTagEvent(
         @Nonnull Ref<EntityStore> entityRef,
-        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull NameTagComponent component)
         implements IEvent<Void> {
 
-    public static void dispatch(Ref<EntityStore> entityStore, Store<EntityStore> store, NameTagComponent component) {
+    public static void dispatch(Ref<EntityStore> entityStore, CommandBuffer<EntityStore> commandBuffer, NameTagComponent component) {
         IEventDispatcher<AppliedTagEvent, AppliedTagEvent> dispatcher =
                 HytaleServer.get().getEventBus().dispatchFor(AppliedTagEvent.class);
 
         if (dispatcher.hasListener()) {
-            dispatcher.dispatch(new AppliedTagEvent(entityStore, store, component));
+            dispatcher.dispatch(new AppliedTagEvent(entityStore, commandBuffer, component));
         }
     }
 }

@@ -42,9 +42,9 @@ public class ChangeAssetSystem extends RefChangeSystem<EntityStore, ChangeAssetC
 
     @Override
     public void onComponentRemoved(@Nonnull Ref<EntityStore> ref, @Nonnull ChangeAssetComponent changeAssetComponent, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        if (!changeAssetComponent.getRemoveOnChange()) return;
+//        if (!changeAssetComponent.getRemoveOnChange()) return;
 
-        setAppearance(ref, changeAssetComponent.getOriginalAsset(), store, commandBuffer);
+//        setAppearance(ref, changeAssetComponent.getOriginalAsset(), store, commandBuffer);
     }
 
     @Nullable

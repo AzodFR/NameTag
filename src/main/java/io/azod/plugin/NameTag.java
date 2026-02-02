@@ -89,7 +89,7 @@ public class NameTag extends JavaPlugin {
 
         // Register Systems
         this.getEntityStoreRegistry().registerSystem(new NameTagEntityJoinSystem());
-        this.getEntityStoreRegistry().registerSystem(new NameTagSystem());
+       // this.getEntityStoreRegistry().registerSystem(new NameTagSystem());
         this.getEntityStoreRegistry().registerSystem(new ChangeAssetSystem());
         this.getEntityStoreRegistry().registerSystem(new PlayAnimationSystem());
 

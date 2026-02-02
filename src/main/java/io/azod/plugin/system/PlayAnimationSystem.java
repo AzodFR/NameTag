@@ -45,12 +45,11 @@ public class PlayAnimationSystem extends RefChangeSystem<EntityStore, PlayAnimat
 
     @Override
     public void onComponentRemoved(@Nonnull Ref<EntityStore> ref, @Nonnull PlayAnimationComponent playAnimationComponent, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        if (!playAnimationComponent.getRemoveOnChange()) return;
-        NPCEntity npcEntity = commandBuffer.getComponent(ref, NPCEntity.getComponentType());
-        if (npcEntity == null) return;
-
-        npcEntity.playAnimation(ref, AnimationSlot.Action, "Idle",  commandBuffer);
-       // AnimationUtils.stopAnimation(ref, AnimationSlot.Action, commandBuffer);
+//        if (!playAnimationComponent.getRemoveOnChange()) return;
+//        NPCEntity npcEntity = commandBuffer.getComponent(ref, NPCEntity.getComponentType());
+//        if (npcEntity == null) return;
+//
+//        npcEntity.playAnimation(ref, AnimationSlot.Action, "Idle",  commandBuffer);
     }
 
     @Nullable

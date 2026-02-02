@@ -1,5 +1,6 @@
 package io.azod.plugin.event.handler;
 
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -15,14 +16,9 @@ public class OnApplyPlayAnimation implements Consumer<ApplyPlayAnimation> {
         Ref<EntityStore> entityRef = event.entityRef();
         if (!entityRef.isValid()) return;
 
-        Store<EntityStore> store = event.store();
+        CommandBuffer<EntityStore> commandBuffer = event.commandBuffer();
 
-        PlayAnimationComponent playAnimationComponent = store.getComponent(entityRef, PlayAnimationComponent.getComponentType());
-
-        if  (playAnimationComponent != null) {
-            store.removeComponent(entityRef, PlayAnimationComponent.getComponentType());
-        }
-        store.addComponent(entityRef, PlayAnimationComponent.getComponentType() ,event.component());
+        commandBuffer.putComponent(entityRef, PlayAnimationComponent.getComponentType() ,event.component());
 
     }
 }

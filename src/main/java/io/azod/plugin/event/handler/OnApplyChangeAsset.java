@@ -1,5 +1,6 @@
 package io.azod.plugin.event.handler;
 
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -15,12 +16,8 @@ public class OnApplyChangeAsset implements Consumer<ApplyChangeAssetEvent> {
         Ref<EntityStore> entityRef = event.entityRef();
         if (!entityRef.isValid()) return;
 
-        Store<EntityStore> store = event.store();
+        CommandBuffer<EntityStore> commandBuffer = event.commandBuffer();
 
-        ChangeAssetComponent changeAssetComponent = store.getComponent(entityRef, ChangeAssetComponent.getComponentType());
-        if (changeAssetComponent != null) {
-            store.removeComponent(entityRef, ChangeAssetComponent.getComponentType());
-        }
-        store.addComponent(entityRef, ChangeAssetComponent.getComponentType(), event.component());
+        commandBuffer.putComponent(entityRef, ChangeAssetComponent.getComponentType(), event.component());
     }
 }

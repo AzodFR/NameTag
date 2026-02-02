@@ -3,6 +3,7 @@ package io.azod.plugin.event.handler;
 import com.hypixel.hytale.assetstore.AssetRegistry;
 import com.hypixel.hytale.assetstore.AssetStore;
 import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -37,24 +38,34 @@ public class OnAppliedTag implements Consumer<AppliedTagEvent> {
         Ref<EntityStore> ref = event.entityRef();
         if (!ref.isValid()) return;
 
-        Store<EntityStore> store = event.store();
+        CommandBuffer<EntityStore> commandBuffer = event.commandBuffer();
 
         NameTagComponent component = event.component();
         String tag = component.getTag();
         if (tag == null) return;
 
-        NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
+        NPCEntity npcEntity = commandBuffer.getComponent(ref, NPCEntity.getComponentType());
         if (npcEntity == null) return;
 
-        //store.removeComponentIfExists(ref, ChangeAssetComponent.getComponentType());
-        //store.removeComponentIfExists(ref, PlayAnimationComponent.getComponentType());
+        ChangeAssetComponent changeAssetComponent = commandBuffer.getComponent(ref, ChangeAssetComponent.getComponentType());
+        if (changeAssetComponent != null) {
+            commandBuffer.removeComponent(ref, ChangeAssetComponent.getComponentType());
+            if (changeAssetComponent.getRemoveOnChange()) {
+                npcEntity.setAppearance(ref, changeAssetComponent.getOriginalAsset(), commandBuffer);
+            }
+        }
+
+        PlayAnimationComponent playAnimationComponent = commandBuffer.getComponent(ref, PlayAnimationComponent.getComponentType());
+        if (playAnimationComponent != null) {
+            commandBuffer.removeComponent(ref, PlayAnimationComponent.getComponentType());
+        }
 
         assetStore.getAssetMap().getAssetMap().forEach((fileName, asset) -> {
             if (asset.compareTagName(tag)) {
                 if (!asset.isInAllowedNPCRoles(npcEntity.getRoleName())) return;
                 if (asset.getLogMessage() != null) handleLogMessage(asset.getLogMessage());
-                if (asset.getChangeAsset() != null) handleChangeAsset(asset.getChangeAsset(), ref, store);
-                if (asset.getPlayAnimation() != null) handlePlayAnimation(asset.getPlayAnimation(), ref, store);
+                if (asset.getChangeAsset() != null) handleChangeAsset(asset.getChangeAsset(), ref, commandBuffer);
+                if (asset.getPlayAnimation() != null) handlePlayAnimation(asset.getPlayAnimation(), ref, commandBuffer);
             }
         });
     }
@@ -63,15 +74,15 @@ public class OnAppliedTag implements Consumer<AppliedTagEvent> {
         LOGGER.atInfo().log(logMessage);
     }
 
-    private void handleChangeAsset(ChangeAsset changeAsset, Ref<EntityStore> entityRef, Store<EntityStore> store) {
-        ModelComponent modelComponent = store.getComponent(entityRef, ModelComponent.getComponentType());
+    private void handleChangeAsset(ChangeAsset changeAsset, Ref<EntityStore> entityRef, CommandBuffer<EntityStore> commandBuffer) {
+        ModelComponent modelComponent = commandBuffer.getComponent(entityRef, ModelComponent.getComponentType());
         if (modelComponent == null) return;
 
         ModelAsset newModel = ModelAsset.getAssetMap().getAsset(changeAsset.getTargetAssetName());
         if (newModel == null) return;
 
         ApplyChangeAssetEvent.dispatch(entityRef,
-                store, new ChangeAssetComponent(
+                commandBuffer, new ChangeAssetComponent(
                         modelComponent.getModel().getModelAssetId(),
                         changeAsset.getTargetAssetName(),
                         changeAsset.getRemoveOnChange()
@@ -79,7 +90,12 @@ public class OnAppliedTag implements Consumer<AppliedTagEvent> {
         );
     }
 
-    public void handlePlayAnimation(PlayAnimation playAnimation, Ref<EntityStore> entityRef, Store<EntityStore> store) {
-        ApplyPlayAnimation.dispatch(entityRef, store, new PlayAnimationComponent(playAnimation.getAnimationName(), playAnimation.getRemoveOnChange()));
+    public void handlePlayAnimation(PlayAnimation playAnimation, Ref<EntityStore> entityRef, CommandBuffer<EntityStore> commandBuffer) {
+        ApplyPlayAnimation.dispatch(entityRef,
+                commandBuffer, new PlayAnimationComponent(
+                        playAnimation.getAnimationName(),
+                        playAnimation.getRemoveOnChange()
+                )
+        );
     }
 }

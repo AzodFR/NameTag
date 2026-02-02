@@ -1,5 +1,6 @@
 package io.azod.plugin.event;
 
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.event.IEvent;
@@ -12,16 +13,16 @@ import javax.annotation.Nonnull;
 
 public record ApplyPlayAnimation(
         @Nonnull Ref<EntityStore> entityRef,
-        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull PlayAnimationComponent component)
         implements IEvent<Void> {
 
-    public static void dispatch(Ref<EntityStore> entityRef, Store<EntityStore> store, PlayAnimationComponent component) {
+    public static void dispatch(Ref<EntityStore> entityRef, CommandBuffer<EntityStore> commandBuffer, PlayAnimationComponent component) {
         IEventDispatcher<ApplyPlayAnimation, ApplyPlayAnimation> dispatcher =
                 HytaleServer.get().getEventBus().dispatchFor(ApplyPlayAnimation.class);
 
         if (dispatcher.hasListener()) {
-            dispatcher.dispatch(new ApplyPlayAnimation(entityRef, store, component));
+            dispatcher.dispatch(new ApplyPlayAnimation(entityRef, commandBuffer, component));
         }
     }
 }
