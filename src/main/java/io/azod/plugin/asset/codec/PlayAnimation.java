@@ -32,4 +32,8 @@ public class PlayAnimation {
     public Boolean getRemoveOnChange() {
         return removeOnChange;
     }
+
+    public String toString() {
+        return "{AnimationName=" + animationName + ", RemoveOnChange=" + removeOnChange +"}";
+    }
 }

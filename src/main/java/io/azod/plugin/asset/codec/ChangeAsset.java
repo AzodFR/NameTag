@@ -30,4 +30,8 @@ public class ChangeAsset {
     public String getTargetAssetName() {
         return this.targetAssetName;
     }
+
+    public String toString(){
+        return "{TargetAsset=" + this.targetAssetName + ", RemoveOnChange=" + this.removeOnChange + "}";
+    }
 }

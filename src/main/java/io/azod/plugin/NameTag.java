@@ -10,7 +10,7 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Int
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import io.azod.plugin.asset.NameTagBehaviour;
+import io.azod.plugin.asset.NameTagBehavior;
 import io.azod.plugin.component.ChangeAssetComponent;
 import io.azod.plugin.component.NameTagComponent;
 import io.azod.plugin.component.PlayAnimationComponent;
@@ -39,12 +39,12 @@ public class NameTag extends JavaPlugin {
         LOGGER.atInfo().log("Setting up plugin " + this.getName());
 
         // Register custom nametag json behaviour
-        HytaleAssetStore<String, NameTagBehaviour, DefaultAssetMap<String, NameTagBehaviour>> assetStore = HytaleAssetStore.builder(
-                        NameTagBehaviour.class, new DefaultAssetMap<>()
+        HytaleAssetStore<String, NameTagBehavior, DefaultAssetMap<String, NameTagBehavior>> assetStore = HytaleAssetStore.builder(
+                        NameTagBehavior.class, new DefaultAssetMap<>()
                 )
                 .setPath("NameTag")
-                .setCodec(NameTagBehaviour.CODEC)
-                .setKeyFunction(NameTagBehaviour::getId)
+                .setCodec(io.azod.plugin.asset.NameTagBehavior.CODEC)
+                .setKeyFunction(io.azod.plugin.asset.NameTagBehavior::getId)
                 .build();
         this.getAssetRegistry().register(assetStore);
         // Debug to print loaded json
@@ -85,9 +85,9 @@ public class NameTag extends JavaPlugin {
     }
 
     private void onLoadAssets(LoadAssetEvent event) {
-        var store = AssetRegistry.getAssetStore(NameTagBehaviour.class);
+        var store = AssetRegistry.getAssetStore(NameTagBehavior.class);
         store.getAssetMap().getAssetMap().forEach((name, asset) -> {
-            LOGGER.atInfo().log("AAAA = " + name + " // " + asset.toString());
+            LOGGER.atInfo().log("Custom NameTag behavior loaded = " + name + " // " + asset.toString());
         });
     }
 
@@ -95,7 +95,5 @@ public class NameTag extends JavaPlugin {
     protected void start() {
         super.start();
         LOGGER.atInfo().log("Starting plugin " + this.getName());
-
-
     }
 }

@@ -11,8 +11,10 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import io.azod.plugin.asset.codec.ChangeAsset;
 import io.azod.plugin.asset.codec.PlayAnimation;
 
+import java.util.Arrays;
 
-public class NameTagBehaviour implements JsonAssetWithMap<String, DefaultAssetMap<String, NameTagBehaviour>> {
+
+public class NameTagBehavior implements JsonAssetWithMap<String, DefaultAssetMap<String, NameTagBehavior>> {
 
     private AssetExtraInfo.Data data;
     private String filename;
@@ -23,10 +25,10 @@ public class NameTagBehaviour implements JsonAssetWithMap<String, DefaultAssetMa
     private Boolean ignoreCase = false;
     private PlayAnimation playAnimation;
 
-    public static final AssetBuilderCodec<String, NameTagBehaviour> CODEC = AssetBuilderCodec.builder(NameTagBehaviour.class, NameTagBehaviour::new,
+    public static final AssetBuilderCodec<String, NameTagBehavior> CODEC = AssetBuilderCodec.builder(NameTagBehavior.class, io.azod.plugin.asset.NameTagBehavior::new,
                     Codec.STRING,
                     (o, v) -> o.filename = v,
-                    NameTagBehaviour::getId,
+                    io.azod.plugin.asset.NameTagBehavior::getId,
                     (o, d) -> o.data = d, o -> o.data)
             .append(
                     new KeyedCodec<String>("TagName", Codec.STRING),
@@ -102,6 +104,11 @@ public class NameTagBehaviour implements JsonAssetWithMap<String, DefaultAssetMa
     }
 
     public String toString() {
-        return "NameTagBehaviour={TagName=" + this.tagName + ", LogMessage=" + this.logMessage + "}";
+        return "NameTagBehavior={TagName=" + this.tagName +
+                ", allowedNPCRoles=" + Arrays.toString(this.allowedNPCRoles) +
+                ", ignoreCase=" + this.ignoreCase +
+                ", LogMessage=" + this.logMessage +
+                " ,PlayAnimation=" + this.playAnimation +
+                ", ChangeAsset=" + this.changeAsset + "}";
     }
 }

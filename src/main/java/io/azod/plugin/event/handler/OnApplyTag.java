@@ -3,7 +3,6 @@ package io.azod.plugin.event.handler;
 import com.hypixel.hytale.assetstore.AssetRegistry;
 import com.hypixel.hytale.assetstore.AssetStore;
 import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
-import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -13,7 +12,7 @@ import com.hypixel.hytale.server.core.entity.nameplate.Nameplate;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import io.azod.plugin.asset.NameTagBehaviour;
+import io.azod.plugin.asset.NameTagBehavior;
 import io.azod.plugin.asset.codec.ChangeAsset;
 import io.azod.plugin.asset.codec.PlayAnimation;
 import io.azod.plugin.component.ChangeAssetComponent;
@@ -26,13 +25,13 @@ import java.util.function.Consumer;
 public class OnApplyTag implements Consumer<ApplyTagEvent> {
 
 private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-private static AssetStore<String, NameTagBehaviour, DefaultAssetMap<String, NameTagBehaviour>> assetStore =
-        AssetRegistry.getAssetStore(NameTagBehaviour.class);
+private static AssetStore<String, NameTagBehavior, DefaultAssetMap<String, NameTagBehavior>> assetStore =
+        AssetRegistry.getAssetStore(NameTagBehavior.class);
 
     @Override
     public void accept(ApplyTagEvent event) {
         if (assetStore == null) {
-            assetStore = AssetRegistry.getAssetStore(NameTagBehaviour.class);
+            assetStore = AssetRegistry.getAssetStore(NameTagBehavior.class);
         }
 
         Ref<EntityStore> entityRef = event.entityRef();
@@ -51,6 +50,7 @@ private static AssetStore<String, NameTagBehaviour, DefaultAssetMap<String, Name
         NPCEntity npcEntity = store.getComponent(entityRef, NPCEntity.getComponentType());
         if (npcEntity == null) return;
 
+        LOGGER.atInfo().log("Removing despawn check from tagged entity");
         npcEntity.setDespawnCheckRemainingSeconds(Float.MAX_VALUE);
 
         ChangeAssetComponent changeAssetComponent = store.getComponent(entityRef, ChangeAssetComponent.getComponentType());
@@ -97,6 +97,7 @@ private static AssetStore<String, NameTagBehaviour, DefaultAssetMap<String, Name
                 changeAsset.getTargetAssetName(),
                 changeAsset.getRemoveOnChange())
         );
+        LOGGER.atInfo().log("Changing asset to: " + changeAsset.getTargetAssetName());
     }
 
     public void handlePlayAnimation(PlayAnimation playAnimation, Ref<EntityStore> entityRef, Store<EntityStore> store, NPCEntity npcEntity) {
@@ -105,6 +106,6 @@ private static AssetStore<String, NameTagBehaviour, DefaultAssetMap<String, Name
                 playAnimation.getAnimationName(),
                 playAnimation.getRemoveOnChange()
         ));
-
+        LOGGER.atInfo().log("Playing animation:" + playAnimation.getAnimationName());
     }
 }

@@ -1,0 +1,7 @@
+{
+  "TagName": "Idle",
+  "PlayAnimation": {
+    "AnimationName": "Idle",
+    "RemoveOnChange": true
+  }
+}
