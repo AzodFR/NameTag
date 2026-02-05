@@ -4,6 +4,7 @@ package io.azod.plugin.metadata;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import io.azod.plugin.component.NameTagComponent;
 
 public class OverriddenCapturedNPCMetadata {
     public static final String KEY = "CapturedEntity";
@@ -13,7 +14,7 @@ public class OverriddenCapturedNPCMetadata {
     private int roleIndex;
     private String npcNameKey;
     private String fullItemIcon;
-    private String nameTag;
+    private NameTagComponent nameTagComponent;
 
     public int getRoleIndex() {
         return this.roleIndex;
@@ -31,8 +32,8 @@ public class OverriddenCapturedNPCMetadata {
         return this.fullItemIcon;
     }
 
-    public String getNameTag() {
-        return this.nameTag;
+    public NameTagComponent getNameTag() {
+        return this.nameTagComponent;
     }
 
     public void setIconPath(String iconPath) {
@@ -51,8 +52,8 @@ public class OverriddenCapturedNPCMetadata {
         this.fullItemIcon = fullItemIcon;
     }
 
-    public void setNameTag(String nameTag) {
-        this.nameTag = nameTag;
+    public void setNameTag(NameTagComponent nameTagComponent) {
+        this.nameTagComponent = nameTagComponent;
     }
 
     static {
@@ -86,10 +87,10 @@ public class OverriddenCapturedNPCMetadata {
                 )
                 .add()
                 .appendInherited(
-                        new KeyedCodec<String>("NameTag", Codec.STRING),
-                        (meta, s) -> meta.nameTag = s,
-                        (meta) -> meta.nameTag,
-                        (meta, parent) -> meta.nameTag = parent.nameTag
+                        new KeyedCodec<NameTagComponent>("NameTag", NameTagComponent.CODEC),
+                        (meta, s) -> meta.nameTagComponent = s,
+                        (meta) -> meta.nameTagComponent,
+                        (meta, parent) -> meta.nameTagComponent = parent.nameTagComponent
                 )
                 .add()
                 .build();

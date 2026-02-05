@@ -27,6 +27,8 @@ import com.hypixel.hytale.server.core.entity.Entity;
 import com.hypixel.hytale.server.core.entity.EntityUtils;
 import com.hypixel.hytale.server.core.entity.nameplate.Nameplate;
 import com.hypixel.hytale.server.npc.metadata.CapturedNPCMetadata;
+import io.azod.plugin.component.NameTagComponent;
+import io.azod.plugin.event.ApplyTagEvent;
 import io.azod.plugin.metadata.OverriddenCapturedNPCMetadata;
 import it.unimi.dsi.fastutil.Pair;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
@@ -150,9 +152,9 @@ public class OverriddenUseCaptureCrateInteraction extends SimpleBlockInteraction
                                             meta.setFullItemIcon(this.fullIcon);
                                         }
 
-                                        Nameplate nameplate = commandBuffer.getComponent(targetEntity, Nameplate.getComponentType());
-                                        if  (nameplate != null) {
-                                            meta.setNameTag(nameplate.getText());
+                                        NameTagComponent tagComponent = commandBuffer.getComponent(targetEntity, NameTagComponent.getComponentType());
+                                        if (tagComponent != null) {
+                                            meta.setNameTag(tagComponent);
                                         }
 
                                         ItemStack itemWithNPC = inHandItemStack.withMetadata(OverriddenCapturedNPCMetadata.KEYED_CODEC, meta);
@@ -229,11 +231,15 @@ public class OverriddenUseCaptureCrateInteraction extends SimpleBlockInteraction
                         NPCPlugin npcModule = NPCPlugin.get();
                         Store<EntityStore> store = context.getCommandBuffer().getStore();
                         int roleIndex = existingMeta.getRoleIndex();
-                        String nameTag = existingMeta.getNameTag();
+                        NameTagComponent nameTag = existingMeta.getNameTag();
                         commandBuffer.run((_store) -> {
                                     Pair<Ref<EntityStore>, NPCEntity> pair = npcModule.spawnEntity(store, roleIndex, spawnPos, Vector3f.ZERO, (Model) null, (TriConsumer) null);
-                                    if (nameTag != null && !nameTag.isEmpty()) {
-                                        store.addComponent(pair.first(), Nameplate.getComponentType() , new Nameplate(nameTag));
+                                    if (nameTag != null && pair != null) {
+                                        ApplyTagEvent.dispatch(
+                                                pair.first(),
+                                                store,
+                                                nameTag
+                                        );
                                     }
                                 }
                         );
