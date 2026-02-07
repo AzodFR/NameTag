@@ -10,11 +10,13 @@ import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
 import com.hypixel.hytale.server.core.entity.nameplate.Nameplate;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import io.azod.plugin.asset.NameTagBehavior;
 import io.azod.plugin.asset.codec.ChangeAsset;
 import io.azod.plugin.asset.codec.PlayAnimation;
+import io.azod.plugin.asset.codec.TransformRotation;
 import io.azod.plugin.component.ChangeAssetComponent;
 import io.azod.plugin.component.NameTagComponent;
 import io.azod.plugin.component.PlayAnimationComponent;
@@ -75,6 +77,7 @@ private static AssetStore<String, NameTagBehavior, DefaultAssetMap<String, NameT
                 if (asset.getLogMessage() != null) handleLogMessage(asset.getLogMessage());
                 if (asset.getChangeAsset() != null) handleChangeAsset(asset.getChangeAsset(), entityRef, store, npcEntity);
                 if (asset.getPlayAnimation() != null) handlePlayAnimation(asset.getPlayAnimation(), entityRef, store, npcEntity);
+                if (asset.getTransformRotation() != null) handleTransformRotation(asset.getTransformRotation(), entityRef, store);
             }
         });
     }
@@ -107,5 +110,14 @@ private static AssetStore<String, NameTagBehavior, DefaultAssetMap<String, NameT
                 playAnimation.getRemoveOnChange()
         ));
         LOGGER.atInfo().log("Playing animation:" + playAnimation.getAnimationName());
+    }
+
+    public void handleTransformRotation(TransformRotation transformRotation, Ref<EntityStore> entityRef, Store<EntityStore> store) {
+        TransformComponent transformComponent = store.getComponent(entityRef, TransformComponent.getComponentType());
+        if (transformComponent == null) return;
+
+        transformComponent.getRotation().z = transformRotation.getZRotation();
+
+        store.putComponent(entityRef, TransformComponent.getComponentType(), transformComponent);
     }
 }

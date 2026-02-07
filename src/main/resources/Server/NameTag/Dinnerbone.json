@@ -1,0 +1,8 @@
+{
+  "TagName": "Dinnerbone",
+  "IgnoreCase": true,
+  "TransformRotation": {
+    "Z": 180,
+    "RemoveOnChange": true
+  }
+}

@@ -10,6 +10,7 @@ import com.hypixel.hytale.codec.KeyedCodec;
 
 import io.azod.plugin.asset.codec.ChangeAsset;
 import io.azod.plugin.asset.codec.PlayAnimation;
+import io.azod.plugin.asset.codec.TransformRotation;
 
 import java.util.Arrays;
 
@@ -24,6 +25,7 @@ public class NameTagBehavior implements JsonAssetWithMap<String, DefaultAssetMap
     private String[] allowedNPCRoles;
     private Boolean ignoreCase = false;
     private PlayAnimation playAnimation;
+    private TransformRotation transformRotation;
 
     public static final AssetBuilderCodec<String, NameTagBehavior> CODEC = AssetBuilderCodec.builder(NameTagBehavior.class, io.azod.plugin.asset.NameTagBehavior::new,
                     Codec.STRING,
@@ -66,6 +68,12 @@ public class NameTagBehavior implements JsonAssetWithMap<String, DefaultAssetMap
                     (c, e) -> c.playAnimation
             )
             .add()
+            .append(
+                    new KeyedCodec<TransformRotation>("TransformRotation", TransformRotation.CODEC),
+                    (c, v, e) -> c.transformRotation = v,
+                    (c, e) -> c.transformRotation
+            )
+            .add()
             .build();
 
     @Override
@@ -95,6 +103,10 @@ public class NameTagBehavior implements JsonAssetWithMap<String, DefaultAssetMap
         return this.playAnimation;
     }
 
+    public TransformRotation getTransformRotation() {
+        return this.transformRotation;
+    }
+
     public boolean isInAllowedNPCRoles(String npcRole) {
         if (this.allowedNPCRoles == null || this.allowedNPCRoles.length == 0) return true;
         for (String allowedNPCRole : allowedNPCRoles) {
@@ -108,7 +120,9 @@ public class NameTagBehavior implements JsonAssetWithMap<String, DefaultAssetMap
                 ", allowedNPCRoles=" + Arrays.toString(this.allowedNPCRoles) +
                 ", ignoreCase=" + this.ignoreCase +
                 ", LogMessage=" + this.logMessage +
-                " ,PlayAnimation=" + this.playAnimation +
-                ", ChangeAsset=" + this.changeAsset + "}";
+                ", PlayAnimation=" + this.playAnimation +
+                ", ChangeAsset=" + this.changeAsset +
+                ", TransformRotation=" + this.transformRotation +
+                "}";
     }
 }
