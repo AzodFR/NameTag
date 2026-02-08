@@ -1,5 +1,6 @@
 {
   "TagName": "LOG",
+  "IsPrefix": true,
   "IgnoreCase": true,
   "LogMessage": "THIS IS A LOG"
 }

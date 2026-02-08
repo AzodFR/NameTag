@@ -20,6 +20,7 @@ import io.azod.plugin.component.NameTagComponent;
 import io.azod.plugin.component.PlayAnimationComponent;
 import io.azod.plugin.event.ApplyTagEvent;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 public class OnApplyTag implements Consumer<ApplyTagEvent> {
@@ -72,11 +73,30 @@ private static AssetStore<String, NameTagBehavior, DefaultAssetMap<String, NameT
         assetStore.getAssetMap().getAssetMap().forEach((fileName, asset) -> {
             if (asset.compareTagName(tag)) {
                 if (!asset.isInAllowedNPCRoles(npcEntity.getRoleName())) return;
+                if (asset.isPrefix()) removePrefix(entityRef, store);
                 if (asset.getLogMessage() != null) handleLogMessage(asset.getLogMessage());
                 if (asset.getChangeAsset() != null) handleChangeAsset(asset.getChangeAsset(), entityRef, store, npcEntity);
                 if (asset.getPlayAnimation() != null) handlePlayAnimation(asset.getPlayAnimation(), entityRef, store, npcEntity);
             }
         });
+    }
+
+    private void removePrefix( Ref<EntityStore> entityRef, Store<EntityStore> store) {
+        Nameplate nameplate = store.getComponent(entityRef, Nameplate.getComponentType());
+        if (nameplate == null) return;
+
+        String[] chunks = nameplate.getText().split(":");
+        if  (chunks.length < 2) return;
+
+        StringBuilder text = new StringBuilder();
+
+        for (int i = 1; i < chunks.length; i++) {
+            text.append(chunks[i]);
+            if (i != chunks.length - 1) text.append(":");
+        }
+
+        nameplate.setText(text.toString());
+        store.putComponent(entityRef, Nameplate.getComponentType(), nameplate);
     }
 
     private void handleLogMessage(String logMessage) {

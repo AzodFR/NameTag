@@ -24,6 +24,7 @@ public class NameTagBehavior implements JsonAssetWithMap<String, DefaultAssetMap
     private String[] allowedNPCRoles;
     private Boolean ignoreCase = false;
     private PlayAnimation playAnimation;
+    private boolean isPrefix;
 
     public static final AssetBuilderCodec<String, NameTagBehavior> CODEC = AssetBuilderCodec.builder(NameTagBehavior.class, io.azod.plugin.asset.NameTagBehavior::new,
                     Codec.STRING,
@@ -66,6 +67,12 @@ public class NameTagBehavior implements JsonAssetWithMap<String, DefaultAssetMap
                     (c, e) -> c.playAnimation
             )
             .add()
+            .append(
+                    new KeyedCodec<Boolean>("IsPrefix", Codec.BOOLEAN),
+                    (c, v, e) -> c.isPrefix = v,
+                    (c, e) -> c.isPrefix
+            )
+            .add()
             .build();
 
     @Override
@@ -73,14 +80,33 @@ public class NameTagBehavior implements JsonAssetWithMap<String, DefaultAssetMap
         return this.filename + "_" + this.tagName;
     }
 
-    public Boolean compareTagName(String tagName) {
-        if (this.ignoreCase) return this.tagName.equalsIgnoreCase(tagName);
+    private Boolean trueCompare(String s) {
+        if (this.ignoreCase) return this.tagName.equalsIgnoreCase(s);
+        return this.tagName.equals(s);
+    }
 
-        return this.tagName.equals(tagName);
+    public Boolean compareTagName(String tagName) {
+        if (this.isPrefix) {
+            String[] chunks = tagName.split(":");
+            if (chunks.length < 2) {
+                return false;
+            }
+            String[] prefixs = chunks[0].split("_");
+            for (String prefix : prefixs) {
+                if (trueCompare(prefix)) return true;
+            }
+            return false;
+        }
+
+        return trueCompare(tagName);
     }
 
     public String getTagName() {
         return this.tagName;
+    }
+
+    public boolean isPrefix() {
+        return this.isPrefix;
     }
 
     public String getLogMessage() {
